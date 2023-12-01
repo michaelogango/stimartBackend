@@ -4,7 +4,6 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import User from '../models/UserModel.js';
 
-// Function to generate JWT token
 const generateToken = (user) => {
   const payload = {
     id: user._id,
@@ -13,42 +12,61 @@ const generateToken = (user) => {
   };
 
   const options = {
-    expiresIn: '24h', // Token expiration time
+    expiresIn: '24h',
   };
 
   return jwt.sign(payload, 'your-secret-key', options);
 };
 
-// Signup controller
 const signup = async (req, res) => {
+  console.log(req.body);
   try {
-    const { name, username, password, role } = req.body;
+    const {
+      name,
+      username,
+      email,
+      password,
+      role,
+      location,
+      phoneNumber,
+      dob,
+      chargingStations,
+    } = req.body;
 
-    // Hash the password before saving it to the database
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // Create a new user
     const newUser = new User({
       name,
       username,
+      email,
       password: hashedPassword,
       role,
+      phoneNumber,
+      dob,
     });
 
-    // Save the user to the database
+    if (role === 'Admin') {
+      console.log('We are heeerrree')
+      console.log(chargingStations)
+      newUser.chargingStations = {
+        location: {
+          type: 'Point',
+          coordinates: [chargingStations.longitude, chargingStations.latitude],
+        },
+        locationName: chargingStations.name,
+      };
+    }
+    console.log(newUser);
+    
     const savedUser = await newUser.save();
-
-    // Generate and send the JWT token
     const token = generateToken(savedUser);
 
-    res.status(201).json({ token });
+    res.status(201).json({ token,role });
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 };
-
-// Login controller
 const login = async (req, res) => {
   try {
     const { username, password } = req.body;
@@ -56,12 +74,19 @@ const login = async (req, res) => {
     // Find the user by username
     const user = await User.findOne({ username });
 
-    // If the user doesn't exist or the password is incorrect, return an error
-    if (!user || !(await bcrypt.compare(password, user.password))) {
-      return res.status(401).json({ error: 'Invalid username or password' });
+    // Check if the user exists
+    if (!user) {
+      return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    // Generate and send the JWT token
+    // Compare the provided password with the hashed password in the database
+    const passwordMatch = await bcrypt.compare(password, user.password);
+
+    if (!passwordMatch) {
+      return res.status(401).json({ error: 'Invalid credentials' });
+    }
+
+    // Generate a JWT token for authentication
     const token = generateToken(user);
 
     res.json({ token });
@@ -71,4 +96,4 @@ const login = async (req, res) => {
   }
 };
 
-export { signup, login };
+export { signup,login };

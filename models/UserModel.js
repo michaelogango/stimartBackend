@@ -1,7 +1,25 @@
-// Import necessary modules
+// UserModel.js
+
 import { Schema, model } from 'mongoose';
 
-// Define the user schema
+const chargingStationSchema = new Schema({
+  location: {
+    type: {
+      type: String,
+      enum: ['Point'],
+      required: true,
+    },
+    coordinates: {
+      type: [Number],
+      required: true,
+    },
+  },
+  locationName: {
+    type: String,
+    required: true,
+  },
+});
+
 const userSchema = new Schema({
   name: {
     type: String,
@@ -12,28 +30,28 @@ const userSchema = new Schema({
     required: true,
     unique: true,
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   password: {
     type: String,
     required: true,
   },
-  // Add other properties as needed, such as email, role, etc.
   role: {
     type: String,
-    enum: ['host', 'passenger'],
+    enum: ['Admin', 'Customer'],
     required: true,
   },
-  // Additional fields for host
-  chargingStations: [{
-    location: {
-      type: String,
-      required: function () {
-        return this.role === 'host';
-      },
-    },
-    // Add other charging station details as needed
-  }],
+  phoneNumber: {
+    type: String,
+  },
+  dob: {
+    type: Date,
+  },
+  chargingStations: [chargingStationSchema], // Array of charging stations for hosts
 });
 
-// Create and export the User model
 const User = model('User', userSchema);
 export default User;

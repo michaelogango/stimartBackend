@@ -9,7 +9,7 @@ import userRoutes from './routes/userRoutes.js';
 
 const app = express();
 const PORT = process.env.PORT || 8080;
-const DB_NAME = 'Library'; // Specify the database name
+const DB_NAME = 'stimart'; // Specify the database name
 
 const CONNECTION_URL = `mongodb+srv://odhis101:natasha12@cluster0.r1d9hq1.mongodb.net/${DB_NAME}?retryWrites=true&w=majority`;
 
