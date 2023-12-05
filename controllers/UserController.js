@@ -45,19 +45,23 @@ const signup = async (req, res) => {
       dob,
     });
 
+    console.log(role)
+
     if (role === 'Admin') {
       console.log('We are heeerrree')
       console.log(chargingStations)
       newUser.chargingStations = {
         location: {
           type: 'Point',
-          coordinates: [chargingStations.longitude, chargingStations.latitude],
+          coordinates: [chargingStations.coordinates[0], chargingStations.coordinates[1]],
         },
         locationName: chargingStations.name,
       };
     }
     console.log(newUser);
     
+    newUser.numberOfStations += 1;
+    newUser.amountOfCharge += 1;
     const savedUser = await newUser.save();
     const token = generateToken(savedUser);
 
@@ -89,7 +93,7 @@ const login = async (req, res) => {
     // Generate a JWT token for authentication
     const token = generateToken(user);
 
-    res.json({ token });
+    res.json({ token, role: user.role }); // Sending the role separately for your current logic
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });

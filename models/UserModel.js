@@ -1,5 +1,4 @@
-// UserModel.js
-
+// models/UserModel.js
 import { Schema, model } from 'mongoose';
 
 const chargingStationSchema = new Schema({
@@ -17,6 +16,10 @@ const chargingStationSchema = new Schema({
   locationName: {
     type: String,
     required: true,
+  },
+  user: {
+    type: Schema.Types.ObjectId,
+    ref: 'User',
   },
 });
 
@@ -50,7 +53,25 @@ const userSchema = new Schema({
   dob: {
     type: Date,
   },
-  chargingStations: [chargingStationSchema], 
+  chargingStations: [chargingStationSchema],
+  
+  // Admin-specific details
+  numberOfStations: {
+    type: Number,
+    default: 0,
+  },
+  numberOfClickedStations: {
+    type: Number,
+    default: 0,
+  },
+  amountOfCharge: {
+    type: Number,
+    default: 0,
+  },
+  moneyReceived: {
+    type: Number,
+    default: 0,
+  },
 });
 
 const User = model('User', userSchema);

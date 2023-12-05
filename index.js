@@ -5,6 +5,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import fileupload from 'express-fileupload';
 import userRoutes from './routes/userRoutes.js';
+import chargingStationRoutes from './routes/ChargingStation.js';
 
 
 const app = express();
@@ -19,6 +20,8 @@ app.use(cors());
 app.use(fileupload());
 
 app.use('/users', userRoutes);
+
+app.use('/chargingStations', chargingStationRoutes);
 
 
 mongoose
