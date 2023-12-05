@@ -50,7 +50,7 @@ const userSchema = new Schema({
   dob: {
     type: Date,
   },
-  chargingStations: [chargingStationSchema], // Array of charging stations for hosts
+  chargingStations: [chargingStationSchema], 
 });
 
 const User = model('User', userSchema);
