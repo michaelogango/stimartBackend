@@ -1,6 +1,7 @@
 // controllers/chargingStationController.js
 import jwt from 'jsonwebtoken';
 import User from '../models/UserModel.js';
+import ChargingStation from '../models/UserModel.js';
 
 const addChargingStation = async (req, res) => {
   const { token, location, locationName } = req.body;
@@ -86,4 +87,29 @@ const getDashboardInfo = async (req, res) => {
     }
   };
 
-export  {addChargingStation,getDashboardInfo};
+  const getAllChargingStations = async (req, res) => {
+    try {
+      // Fetch all charging stations from the database
+      const chargingStations = await ChargingStation.find()
+      .populate({
+          path: 'chargingStations',
+          select: 'location locationName',
+      })
+      .select('name username email role chargingStations');
+    
+      // Check if there are any charging stations
+      if (!chargingStations || chargingStations.length === 0) {
+        return res.status(404).json({ message: 'No charging stations found' });
+      }
+  
+      // Respond with the list of charging stations
+      return res.status(200).json(chargingStations);
+    } catch (error) {
+      console.error(error);
+      return res.status(500).json({ error: 'Internal Server Error' });
+    }
+};
+
+  
+
+export  {addChargingStation,getDashboardInfo,getAllChargingStations};

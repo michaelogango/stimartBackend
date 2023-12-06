@@ -1,7 +1,7 @@
 // userRoutes.js
 
 import express from 'express';
-import {addChargingStation,getDashboardInfo} from '../controllers/ChargingStation.js';
+import {addChargingStation,getDashboardInfo,getAllChargingStations} from '../controllers/ChargingStation.js';
 
 const router = express.Router();
 
@@ -11,6 +11,8 @@ router.post('/addChargingStation', addChargingStation);
 // get route
 
 router.get('/getDashboardInfo', getDashboardInfo);
+
+router.get('/getAllChargingStations', getAllChargingStations);
 
 
 
