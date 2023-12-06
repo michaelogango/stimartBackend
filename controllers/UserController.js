@@ -49,13 +49,13 @@ const signup = async (req, res) => {
 
     if (role === 'Admin') {
       console.log('We are heeerrree')
-      console.log(chargingStations)
+      console.log(location.coordinates[0])
       newUser.chargingStations = {
         location: {
           type: 'Point',
-          coordinates: [chargingStations.coordinates[0], chargingStations.coordinates[1]],
+          coordinates: [location.coordinates[0], location.coordinates[1]],
         },
-        locationName: chargingStations.name,
+        locationName: location.name,
       };
     }
     console.log(newUser);

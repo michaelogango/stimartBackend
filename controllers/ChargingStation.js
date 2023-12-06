@@ -7,6 +7,7 @@ const addChargingStation = async (req, res) => {
   const { token, location, locationName } = req.body;
 console.log(token)
 console.log("location",location)
+console.log(req.body)
   try {
     // Verify the JWT token
     const decodedToken = jwt.verify(token, 'your-secret-key'); // Replace 'your_secret_key' with your actual secret key used for signing tokens
@@ -83,6 +84,7 @@ const getDashboardInfo = async (req, res) => {
       return res.status(200).json(dashboardInfo);
     } catch (error) {
       console.error(error);
+      console.log(req.body)
       return res.status(500).json({ error: 'Internal Server Error' });
     }
   };
