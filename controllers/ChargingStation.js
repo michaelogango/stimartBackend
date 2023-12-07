@@ -55,13 +55,14 @@ console.log(req.body)
 
 const getDashboardInfo = async (req, res) => {
     const { token } = req.query; // Access token from query parameters
-    console.log('hit this route')
+    console.log('hit this route and againn *****')
     console.log(token)
   
     try {
       // Verify the JWT token
-      const decodedToken = jwt.verify(token, 'your_secret_key'); // Replace 'your_secret_key' with your actual secret key used for signing tokens
+      const decodedToken = jwt.verify(token, 'your-secret-key'); // Replace 'your_secret_key' with your actual secret key used for signing tokens
   
+      
       // Find the user associated with the token
       const user = await User.findById(decodedToken.id);
   
